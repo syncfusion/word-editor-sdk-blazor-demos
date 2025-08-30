@@ -19,9 +19,9 @@ namespace BlazorDemos.Model
 
         private LocalEmbedder? Embedder;
 
-        private AzureAIService? OpenAIService;
+        private CustomAIService? OpenAIService;
 
-        public DocumentSummarizer(LocalEmbedder embedder, AzureAIService azureAIService)
+        public DocumentSummarizer(LocalEmbedder embedder, CustomAIService azureAIService)
         {
             Embedder = embedder;
             OpenAIService = azureAIService;
@@ -51,7 +51,7 @@ namespace BlazorDemos.Model
                 foreach (var chunk in embed)
                 {
                     chatParameters.Messages.Add(new ChatMessage(ChatRole.User, chunk));
-                    var result = await OpenAIService.GetChatResponseAsync(chatParameters);
+                    var result = await OpenAIService.GenerateResponseAsync(chatParameters);
                     summaryResults.Add(result.ToString());
                     chatParameters.Messages.RemoveAt(chatParameters.Messages.Count - 1);
                 }
@@ -60,7 +60,7 @@ namespace BlazorDemos.Model
             else
             {
                 chatParameters.Messages.Add(new ChatMessage(ChatRole.User, message));
-                var result = await OpenAIService.GetChatResponseAsync(chatParameters);
+                var result = await OpenAIService.GenerateResponseAsync(chatParameters);
                 return result.ToString();
             }
         }
