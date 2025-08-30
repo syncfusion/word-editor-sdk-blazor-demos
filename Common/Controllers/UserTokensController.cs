@@ -1,12 +1,8 @@
 using BlazorDemos.Service;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.Blazor.InteractiveChat;
-using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using System.Threading.Tasks;
-
 namespace BlazorDemos.Controllers
 {
     [Route("api/[controller]")]
@@ -15,17 +11,15 @@ namespace BlazorDemos.Controllers
     {
         private readonly IWebHostEnvironment _env;
         private UserTokenService userToken { get; set; }
-
         public UserTokensController(IWebHostEnvironment env, UserTokenService user)
         {
             _env = env;
             userToken = user;
         }
-
         [HttpGet("get_remaining_tokens/{userId}")]
         public async Task<IActionResult> GetRemainingTokens(string userId)
         {
-            var filePath = Path.Combine(_env.ContentRootPath, "user_tokens.json");
+            string filePath = Path.Combine(_env.ContentRootPath, "user_tokens.json");
             int remainingTokens = await userToken.GetRemainingTokensAsync(userId);
             string alertMessage = await userToken.ReturnAlertMessage(userId);
             if (remainingTokens <= 300)
@@ -37,4 +31,3 @@ namespace BlazorDemos.Controllers
         }
     }
 }
-

@@ -74,12 +74,16 @@
   <ItemGroup>
     <Compile Remove="AssetMinifier\**" />
     <Compile Remove="Controllers\**" />
+    <Compile Remove="Service\**" />
     <Content Remove="AssetMinifier\**" />
     <Content Remove="Controllers\**" />
+    <Compile Remove="Service\**" />
     <EmbeddedResource Remove="AssetMinifier\**" />
     <EmbeddedResource Remove="Controllers\**" />
+    <Compile Remove="Service\**" />
     <None Remove="AssetMinifier\**" />
     <None Remove="Controllers\**" />
+    <Compile Remove="Service\**" />
   </ItemGroup>
 
   <ItemGroup>

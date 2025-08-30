@@ -41,21 +41,19 @@ SyncfusionLicenseProvider.RegisterLicense(licenseKey);
 // Local Embeddings
 builder.Services.AddSingleton<LocalEmbedder>();
 // Smart Components
+#region AI services
 /* OpenAI Service */
 string apiKey = "your api key";
 string deploymentName = "your deployment name";
 OpenAIClient openAIClient = new OpenAIClient(apiKey);
 IChatClient openAiChatClient = openAIClient.GetChatClient(deploymentName).AsIChatClient();
 builder.Services.AddChatClient(openAiChatClient);
-
-builder.Services.AddSyncfusionSmartComponents()
-    .InjectOpenAIInference();
-builder.Services.AddSingleton<SyncfusionAIService>();
 builder.Services.AddScoped<UserTokenService>();
-builder.Services.AddScoped<AzureAIService>(sp =>
+builder.Services.AddScoped<CustomAIService>();
+builder.Services.AddScoped<IChatInferenceService, CustomAIService>(sp =>
 {
-    var userTokenService = sp.GetRequiredService<UserTokenService>();
-    return new AzureAIService(userTokenService, openAiChatClient);
+    UserTokenService userTokenService = sp.GetRequiredService<UserTokenService>();
+    return new CustomAIService(userTokenService, openAiChatClient);
 });
 
 #endregion
@@ -130,3 +128,4 @@ if (!app.Environment.IsDevelopment())
 #endif
 app.MapControllers();
 app.Run();
+#endregion

@@ -1,28 +1,21 @@
-﻿using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.AI;
+﻿using Microsoft.Extensions.AI;
 using Syncfusion.Blazor.AI;
-using OpenAI;
-
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 namespace BlazorDemos.Service
 {
-    public class AzureAIService
+    public class CustomAIService : IChatInferenceService
     {
         private readonly UserTokenService _userTokenService;
         private ChatParameters chatParameters_history = new ChatParameters();
         private IChatClient _chatClient;
-
-        public AzureAIService(UserTokenService userTokenService, IChatClient client)
+        public CustomAIService(UserTokenService userTokenService, IChatClient client)
         {
             _userTokenService = userTokenService;
             this._chatClient = client ?? throw new ArgumentNullException(nameof(client));
         }
-
-
         /// <summary>
         /// Gets a text completion from the Azure OpenAI service.
         /// </summary>
@@ -31,7 +24,7 @@ namespace BlazorDemos.Service
         /// <param name="appendPreviousResponse">Indicates whether to append previous responses to the conversation history. Defaults to <c>false</c></param>
         /// <param name="systemRole">Specifies the systemRole that is sent to AI Clients. Defaults to <c>null</c></param>
         /// <returns>The AI-generated completion as a string.</returns>
-        public async Task<string> GetCompletionAsync(string prompt, bool returnAsJson = true, bool appendPreviousResponse = false, string systemRole = null)
+        public async Task<string> GetCompletionAsync(string prompt, bool returnAsJson = true, bool appendPreviousResponse = false, string systemRole = null, int outputTokens = 2000)
         {
             string systemMessage = returnAsJson ? "You are a helpful assistant that only returns and replies with valid, iterable RFC8259 compliant JSON in your responses unless I ask for any other format. Do not provide introductory words such as 'Here is your result' or '```json', etc. in the response" : !string.IsNullOrEmpty(systemRole) ? systemRole : "You are a helpful assistant";
             try
@@ -51,10 +44,11 @@ namespace BlazorDemos.Service
                 {
                     chatParameters.Messages = new List<ChatMessage>(2) {
                         new ChatMessage (ChatRole.System, systemMessage),
-                        new ChatMessage(ChatRole.User,prompt)
+                        new ChatMessage(ChatRole.User,prompt),
                     };
                 }
-                var completion = await GetChatResponseAsync(chatParameters);
+                chatParameters.MaxTokens = outputTokens;
+                string completion = await GenerateResponseAsync(chatParameters);
                 if (appendPreviousResponse)
                 {
                     chatParameters_history?.Messages?.Add(new ChatMessage(ChatRole.Assistant, completion));
@@ -67,20 +61,18 @@ namespace BlazorDemos.Service
                 return "";
             }
         }
-
-        public async Task<string> GetChatResponseAsync(ChatParameters options)
+        public async Task<string> GenerateResponseAsync(ChatParameters options)
         {
             string userCode = await _userTokenService.GetUserFingerprintAsync();
             int remainingTokens = await _userTokenService.GetRemainingTokensAsync(userCode);
-            int inputTokens = options.Messages.Sum(message => message.Text.Length/4);
-
+            int inputTokens = options.Messages.Sum(message => message.Text.Length / 4);
             if (remainingTokens <= inputTokens)
             {
                 await _userTokenService.ShowAlert(userCode);
                 return null;
             }
             // Create a completion request with the provided parameters
-            var completionRequest = new ChatOptions
+            ChatOptions completionRequest = new ChatOptions
             {
                 Temperature = options.Temperature ?? 0.5f,
                 TopP = options.TopP ?? 1.0f,
@@ -97,7 +89,7 @@ namespace BlazorDemos.Service
             }
             catch (Exception ex)
             {
-                throw;
+                return null;
             }
         }
     }
