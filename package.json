@@ -1,17 +1,17 @@
 {
-	"name": "blazor-word-editor-samples",
+	"name": "blazor-docx-editor-samples",
 	"version": "1.0.0",
-	"description": "Syncfusion Blazor Word Editor Samples",
+	"description": "Syncfusion Blazor DOCX Editor Samples",
 	"author": "Syncfusion Inc.",
 	"license": "SEE LICENSE IN license",
 	"keywords": [
 		"blazor",
-		"blazor-word-editor-samples",
+		"blazor-docx-editor-samples",
 		"blazor-home-page"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://gitea.syncfusion.com/essential-studio/blazor-word-editor-samples.git"
+		"url": "https://gitea.syncfusion.com/essential-studio/blazor-docx-editor-samples.git"
 	},
 	"devDependencies": {
 		"@syncfusion/ej2-staging": "*",
