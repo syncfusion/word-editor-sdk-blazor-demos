@@ -59,7 +59,18 @@ The **Syncfusion® Blazor Docx Editor** component allows you to view, review, ed
   * Dialog - Provides dialog for inserting elements such as hyperlink, table and formatting such as font, paragraph, list, style, table.
   * Options pane - Provides options pane to perform find and replace operations.
 
-**Documentation:** [Docx Editor Documentation](https://help.syncfusion.com/document-processing/word/word-processor/blazor/getting-started/server-side-application)
+  **Documentation:** [Docx Editor Documentation](https://help.syncfusion.com/document-processing/word/word-processor/blazor/getting-started/server-side-application)
+---
+### Smart AI Assist
+The **Syncfusion® Blazor Docx Editor** integrates AI capabilities to enhance content creation. Users can generate new content from prompts, refine existing content, and produce summaries or Q&A responses based on the document.
+**Key Smart Features:**
+- **Rephrase:** Enhance clarity and tone with AI-powered sentence rephrasing.
+- **Translate:** Automatically complete form fields using intelligent language translation.
+- **Grammar:** Detect and redact sensitive content with AI-driven grammar analysis.
+- **Summarization and Q&A:** Summarize documents and answer questions while ensuring sensitive content is redacted.
+
+
+#### 🔗 **View Live Demo**  [Docx Editor with Smart AI Assist](https://document.syncfusion.com/demos/docx-editor/blazor-server/ai-documenteditor/smart-ai-assist)
 ---
 
 ## Getting Started
